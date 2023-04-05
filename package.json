@@ -1,7 +1,7 @@
 {
   "name": "cad_project",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project is basically about developing a Computer Aided Diagnosis(CAD) model using SVM which should measure DTI MRI scans of mood-affected and non-affected individuals suffering from depression and other mental health related diseases.\r So in simple terms basically a model for detection of depression.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,5 +14,13 @@
     "express": "^4.18.2",
     "mongodb": "^5.1.0",
     "mongoose": "^6.10.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shrey-kumbhare/CAD.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shrey-kumbhare/CAD/issues"
+  },
+  "homepage": "https://github.com/shrey-kumbhare/CAD#readme"
 }
