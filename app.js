@@ -13,14 +13,19 @@ app.use(bodyParser.urlencoded({
 }));
 
 
-mongoose.set('strictQuery', true); mongoose.connect('mongodb://127.0.0.1/userDB');
+mongoose.set('strictQuery', true); mongoose.connect('mongodb://127.0.0.1/cadDB');
 mongoose.set('strictQuery', false);
 
-const userSchema = new mongoose.Schema ({
+const patientSchema = new mongoose.Schema ({
   email: String,
   password: String,
 });
-const USER =  mongoose.model("User", userSchema);
+const PATIENT =  mongoose.model("Patient", patientSchema);
+const proffesionalSchema = new mongoose.Schema ({
+  email: String,
+  password: String,
+});
+const PROFFESIONAL =  mongoose.model("Proffesional", proffesionalSchema);
 app.get("/", function(req, res){
   res.render("home");
 });
@@ -29,34 +34,14 @@ app.get("/login", function(req, res){
   res.render("login");
 });
 
-app.get("/register", function(req, res){
-  res.render("register");
-});
-
-
-app.get("/logout", function(req, res){
-  req.logout();
-  res.redirect("/");
-});
-
-app.post("/register", function(req, res){
-  const user=new USER({
-    username: req.body.username,
-    password: req.body.password,
-  });
-  user.save();
-  res.redirect("/");
-
-});
-
 app.post("/login", function(req, res){
 
-  const user = new USER({
-    username: req.body.username,
+  const proffesional = new PROFFESIONAL({
+    email: req.body.username,
     password: req.body.password
   });
 
-  USER.findOne(user, function(err){
+  PROFFESIONAL.findOne(proffesional, function(err){
     if (err) {
       console.log(err);
     } else {
@@ -65,11 +50,58 @@ app.post("/login", function(req, res){
   });
 
 });
+app.get("/register", function(req, res){
+  res.render("register");
+});
+
+app.post("/register", function(req, res){
+  const proffesional = new PROFFESIONAL({
+    email: req.body.username,
+    password: req.body.password
+  });
+  proffesional.save();
+  res.redirect("/");
+
+});
+
+app.get("/PATIENTlogin", function(req, res){
+  res.render("patientLogin");
+});
+
+app.post("/PATIENTlogin", function(req, res){
+
+  const patient = new PATIENT({
+    email: req.body.username,
+    password: req.body.password
+  });
+
+  PATIENT.findOne(patient, function(err){
+    if (err) {
+      console.log(err);
+    } else {
+        res.redirect("/");
+    }
+  });
+
+});
+app.get("/PATIENTregister", function(req, res){
+  res.render("patientRegister");
+});
+
+app.post("/PATIENTregister", function(req, res){
+  const patient = new PATIENT({
+    email: req.body.username,
+    password: req.body.password
+  });
+  patient.save();
+  res.redirect("/");
 
 
-
-
-
+});
+app.get("/logout", function(req, res){
+  req.logout();
+  res.redirect("/");
+});
 
 
 app.listen(3000, function() {
