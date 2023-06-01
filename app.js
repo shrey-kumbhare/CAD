@@ -43,9 +43,13 @@ patientSchema.plugin(findOrCreate);
 const PATIENT =  mongoose.model("Patient", patientSchema);
 const proffesionalSchema = new mongoose.Schema ({
   email: String,
-  password: String
+  password: String,
+  googleId:String
 });
+proffesionalSchema.plugin(passportLocalMongoose);
+proffesionalSchema.plugin(findOrCreate);
 const PROFFESIONAL =  mongoose.model("Proffesional", proffesionalSchema);
+
 app.get("/", function(req, res){
   res.render("home");
 });
@@ -54,12 +58,17 @@ app.get("/", function(req, res){
 
 passport.use(PATIENT.createStrategy());
 
+passport.use(PROFFESIONAL.createStrategy());
+
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
 
 passport.deserializeUser(function(id, done) {
   PATIENT.findById(id, function(err, user) {
+    done(err, user);
+  });
+  PROFFESIONAL.findById(id, function(err, user) {
     done(err, user);
   });
 });
@@ -71,8 +80,10 @@ passport.use(new GoogleStrategy({
   userProfileURL:"https://www.googleapis.com/oauth2/v3/userinfo"
 },
 function(accessToken, refreshToken, profile, cb) {
-  console.log(profile)
   PATIENT.findOrCreate({ googleId: profile.id }, function (err, user) {
+    return cb(err, user);
+  });
+  PROFFESIONAL.findOrCreate({ googleId: profile.id }, function (err, user) {
     return cb(err, user);
   });
 }
@@ -158,7 +169,7 @@ app.get("/auth/google/secrets",
   passport.authenticate('google', { failureRedirect: "/PATIENTlogin" }),
   function(req, res) {
     // Successful authentication, redirect to secrets.
-    res.redirect("/");
+    res.redirect("https://www.google.com/");
   });
 
 app.listen(3000, function() {
