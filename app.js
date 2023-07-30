@@ -40,6 +40,7 @@ const patientSchema = new mongoose.Schema ({
 });
 patientSchema.plugin(passportLocalMongoose);
 patientSchema.plugin(findOrCreate);
+
 const PATIENT =  mongoose.model("Patient", patientSchema);
 const proffesionalSchema = new mongoose.Schema ({
   email: String,
